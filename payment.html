@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - College Canteen</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍽️</text></svg>">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #10b981 0%, #f97316 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 24px;">🍽️</div>
+                <div>
+                    <h1>College Canteen</h1>
+                    <p style="font-size: 12px; color: #666; margin: 0;">Fresh & Fast</p>
+                </div>
+            </a>
+
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="menu.html">Menu</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <button class="cart-btn" onclick="window.location.href='cart.html'">
+                    Cart
+                    <span class="cart-count">0</span>
+                </button>
+                <button class="mobile-menu-btn">☰</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Payment Section -->
+    <section style="padding: 120px 0 80px;">
+        <div class="container">
+            <div style="text-align: center; margin-bottom: 40px;">
+                <h1 style="font-size: 2.5rem; margin-bottom: 10px; color: #333;">Secure Payment</h1>
+                <p style="color: #666; font-size: 1.1rem;">Complete your order with our secure payment gateway</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 40px;">
+                <!-- Order Summary -->
+                <div style="background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                    <h2 style="margin-bottom: 20px; color: #333;">Order Summary</h2>
+
+                    <div id="paymentOrderSummary">
+                        <!-- Order items will be loaded here -->
+                    </div>
+
+                    <div style="border-top: 1px solid #e5e7eb; margin: 20px 0; padding-top: 20px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <span>Subtotal:</span>
+                            <span id="paymentSubtotal">₹0.00</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <span>Tax (5%):</span>
+                            <span id="paymentTax">₹0.00</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 1.3rem; font-weight: bold; color: #10b981;">
+                            <span>Total:</span>
+                            <span id="paymentTotal">₹0.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Form -->
+                <div style="background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                    <h2 style="margin-bottom: 20px; color: #333;">Payment Details</h2>
+
+                    <!-- Payment Method Selection -->
+                    <div style="margin-bottom: 30px;">
+                        <h3 style="margin-bottom: 15px; color: #333;">Select Payment Method</h3>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px;">
+                            <label class="payment-method" onclick="selectPaymentMethod('card')">
+                                <input type="radio" name="paymentMethod" value="card" checked>
+                                <div style="text-align: center;">
+                                    <div style="font-size: 2rem; margin-bottom: 5px;">💳</div>
+                                    <div>Credit/Debit Card</div>
+                                </div>
+                            </label>
+                            <label class="payment-method" onclick="selectPaymentMethod('upi')">
+                                <input type="radio" name="paymentMethod" value="upi">
+                                <div style="text-align: center;">
+                                    <div style="font-size: 2rem; margin-bottom: 5px;">📱</div>
+                                    <div>UPI</div>
+                                </div>
+                            </label>
+                            <label class="payment-method" onclick="selectPaymentMethod('wallet')">
+                                <input type="radio" name="paymentMethod" value="wallet">
+                                <div style="text-align: center;">
+                                    <div style="font-size: 2rem; margin-bottom: 5px;">👛</div>
+                                    <div>Digital Wallet</div>
+                                </div>
+                            </label>
+                            <label class="payment-method" onclick="selectPaymentMethod('cod')">
+                                <input type="radio" name="paymentMethod" value="cod">
+                                <div style="text-align: center;">
+                                    <div style="font-size: 2rem; margin-bottom: 5px;">💵</div>
+                                    <div>Cash on Delivery</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Card Payment Form -->
+                    <div id="cardForm" class="payment-form">
+                        <form id="cardPaymentForm" onsubmit="processCardPayment(event)">
+                            <div class="form-group">
+                                <label for="cardNumber">Card Number</label>
+                                <input type="text" id="cardNumber" name="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" required>
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                                <div class="form-group">
+                                    <label for="expiryDate">Expiry Date</label>
+                                    <input type="text" id="expiryDate" name="expiryDate" placeholder="MM/YY" maxlength="5" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="cvv">CVV</label>
+                                    <input type="text" id="cvv" name="cvv" placeholder="123" maxlength="3" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="cardName">Cardholder Name</label>
+                                <input type="text" id="cardName" name="cardName" placeholder="John Doe" required>
+                            </div>
+
+                            <button type="submit" class="btn" style="width: 100%; margin-top: 20px;">Pay Now</button>
+                        </form>
+                    </div>
+
+                    <!-- UPI Payment Form -->
+                    <div id="upiForm" class="payment-form" style="display: none;">
+                        <form id="upiPaymentForm" onsubmit="processUpiPayment(event)">
+                            <div class="form-group">
+                                <label for="upiId">UPI ID</label>
+                                <input type="text" id="upiId" name="upiId" placeholder="yourname@upi" required>
+                            </div>
+
+                            <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                                <p style="margin: 0; color: #666; font-size: 0.9rem;">
+                                    💡 Popular UPI apps: Google Pay, PhonePe, Paytm, BHIM UPI
+                                </p>
+                            </div>
+
+                            <button type="submit" class="btn" style="width: 100%; margin-top: 20px;">Pay with UPI</button>
+                        </form>
+                    </div>
+
+                    <!-- Wallet Payment Form -->
+                    <div id="walletForm" class="payment-form" style="display: none;">
+                        <form id="walletPaymentForm" onsubmit="processWalletPayment(event)">
+                            <div class="form-group">
+                                <label for="walletType">Select Wallet</label>
+                                <select id="walletType" name="walletType" required>
+                                    <option value="">Choose wallet...</option>
+                                    <option value="paytm">Paytm</option>
+                                    <option value="amazonpay">Amazon Pay</option>
+                                    <option value="mobikwik">MobiKwik</option>
+                                    <option value="freecharge">FreeCharge</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="walletNumber">Mobile Number</label>
+                                <input type="tel" id="walletNumber" name="walletNumber" placeholder="Enter registered mobile number" required>
+                            </div>
+
+                            <button type="submit" class="btn" style="width: 100%; margin-top: 20px;">Pay with Wallet</button>
+                        </form>
+                    </div>
+
+                    <!-- COD Form -->
+                    <div id="codForm" class="payment-form" style="display: none;">
+                        <div style="text-align: center; padding: 30px;">
+                            <div style="font-size: 3rem; margin-bottom: 20px;">💵</div>
+                            <h3 style="margin-bottom: 15px; color: #333;">Cash on Delivery</h3>
+                            <p style="color: #666; margin-bottom: 30px;">
+                                Pay in cash when your order is delivered to you. No online payment required.
+                            </p>
+                            <button class="btn" onclick="processCodPayment()">Confirm Cash Payment</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div>
+                <h3>College Canteen</h3>
+                <p>Your favorite campus dining destination, serving fresh, delicious, and affordable meals to students and staff.</p>
+            </div>
+
+            <div>
+                <h3>Quick Links</h3>
+                <a href="index.html">Home</a>
+                <a href="menu.html">Menu</a>
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+            </div>
+
+            <div>
+                <h3>Contact Info</h3>
+                <p>📍 Ground Floor, Main Building<br>College Campus</p>
+                <p>⏰ Mon-Sat: 8:00 AM - 6:00 PM</p>
+                <p>📞 +91 98765 43210</p>
+                <p>✉️ canteen@college.edu</p>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2025 College Canteen. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Additional Styles -->
+    <style>
+        .payment-method {
+            display: block;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .payment-method:hover,
+        .payment-method.selected {
+            border-color: #10b981;
+            background: #f0fdf4;
+        }
+
+        .payment-method input[type="radio"] {
+            display: none;
+        }
+
+        .payment-form {
+            animation: fadeIn 0.3s ease;
+        }
+
+        .error {
+            border-color: #ef4444 !important;
+        }
+
+        .error-message {
+            color: #ef4444;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .btn {
+            cursor: pointer;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+
+    <script src="script.js"></script>
+    <script>
+        let selectedPaymentMethod = 'card';
+
+        function selectPaymentMethod(method) {
+            selectedPaymentMethod = method;
+
+            // Update visual selection
+            document.querySelectorAll('.payment-method').forEach(el => el.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+
+            // Hide all forms
+            document.querySelectorAll('.payment-form').forEach(form => form.style.display = 'none');
+
+            // Show selected form
+            document.getElementById(method + 'Form').style.display = 'block';
+        }
+
+        function loadPaymentOrderSummary() {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const orderSummary = document.getElementById('paymentOrderSummary');
+
+            if (cart.length === 0) {
+                window.location.href = 'cart.html';
+                return;
+            }
+
+            orderSummary.innerHTML = '';
+            cart.forEach(item => {
+                const itemElement = document.createElement('div');
+                itemElement.style.cssText = 'display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #e5e7eb;';
+
+                itemElement.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <img src="${item.image}" alt="${item.name}" style="width: 40px; height: 40px; border-radius: 6px; object-fit: cover;">
+                        <div>
+                            <div style="font-weight: 500; color: #333;">${item.name}</div>
+                            <div style="color: #666; font-size: 0.9rem;">Qty: ${item.quantity}</div>
+                        </div>
+                    </div>
+                    <span style="font-weight: bold; color: #10b981;">₹${(item.price * item.quantity).toFixed(2)}</span>
+                `;
+
+                orderSummary.appendChild(itemElement);
+            });
+
+            // Calculate totals
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const tax = subtotal * 0.05;
+            const total = subtotal + tax;
+
+            document.getElementById('paymentSubtotal').textContent = `₹${subtotal.toFixed(2)}`;
+            document.getElementById('paymentTax').textContent = `₹${tax.toFixed(2)}`;
+            document.getElementById('paymentTotal').textContent = `₹${total.toFixed(2)}`;
+        }
+
+        function processCardPayment(event) {
+            event.preventDefault();
+
+            const form = event.target;
+            const cardNumber = form.cardNumber.value.replace(/\s/g, '');
+            const expiryDate = form.expiryDate.value;
+            const cvv = form.cvv.value;
+            const cardName = form.cardName.value;
+
+            // Clear previous errors
+            FormValidator.clearAllErrors(form);
+
+            // Validate card number (basic validation)
+            if (!/^\d{13,19}$/.test(cardNumber)) {
+                FormValidator.showError(form.cardNumber, 'Please enter a valid card number');
+                return;
+            }
+
+            // Validate expiry date
+            if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(expiryDate)) {
+                FormValidator.showError(form.expiryDate, 'Please enter a valid expiry date (MM/YY)');
+                return;
+            }
+
+            // Validate CVV
+            if (!/^\d{3}$/.test(cvv)) {
+                FormValidator.showError(form.cvv, 'Please enter a valid CVV');
+                return;
+            }
+
+            // Validate card name
+            if (!FormValidator.validateRequired(cardName)) {
+                FormValidator.showError(form.cardName, 'Please enter the cardholder name');
+                return;
+            }
+
+            // Simulate payment processing
+            const submitBtn = form.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Processing Payment...';
+
+            setTimeout(() => {
+                alert('Payment successful! Your order has been placed.');
+                window.location.href = 'order-confirmation.html';
+            }, 2000);
+        }
+
+        function processUpiPayment(event) {
+            event.preventDefault();
+
+            const form = event.target;
+            const upiId = form.upiId.value;
+
+            // Clear previous errors
+            FormValidator.clearAllErrors(form);
+
+            // Validate UPI ID
+            if (!FormValidator.validateRequired(upiId) || !upiId.includes('@')) {
+                FormValidator.showError(form.upiId, 'Please enter a valid UPI ID');
+                return;
+            }
+
+            // Simulate UPI payment
+            const submitBtn = form.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Processing UPI Payment...';
+
+            setTimeout(() => {
+                alert('UPI payment successful! Your order has been placed.');
+                window.location.href = 'order-confirmation.html';
+            }, 2000);
+        }
+
+        function processWalletPayment(event) {
+            event.preventDefault();
+
+            const form = event.target;
+            const walletType = form.walletType.value;
+            const walletNumber = form.walletNumber.value;
+
+            // Clear previous errors
+            FormValidator.clearAllErrors(form);
+
+            // Validate wallet type
+            if (!FormValidator.validateRequired(walletType)) {
+                FormValidator.showError(form.walletType, 'Please select a wallet');
+                return;
+            }
+
+            // Validate mobile number
+            if (!/^\d{10}$/.test(walletNumber)) {
+                FormValidator.showError(form.walletNumber, 'Please enter a valid 10-digit mobile number');
+                return;
+            }
+
+            // Simulate wallet payment
+            const submitBtn = form.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Processing Wallet Payment...';
+
+            setTimeout(() => {
+                alert('Wallet payment successful! Your order has been placed.');
+                window.location.href = 'order-confirmation.html';
+            }, 2000);
+        }
+
+        function processCodPayment() {
+            alert('Cash on Delivery selected! Your order will be delivered soon.');
+            window.location.href = 'order-confirmation.html';
+        }
+
+        // Format card number input
+        document.getElementById('cardNumber').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\s/g, '');
+            value = value.replace(/(\d{4})/g, '$1 ').trim();
+            e.target.value = value;
+        });
+
+        // Format expiry date input
+        document.getElementById('expiryDate').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length >= 2) {
+                value = value.slice(0, 2) + '/' + value.slice(2, 4);
+            }
+            e.target.value = value;
+        });
+
+        // Load order summary on page load
+        document.addEventListener('DOMContentLoaded', loadPaymentOrderSummary);
+    </script>
+</body>
+</html>

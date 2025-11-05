@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu - College Canteen</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍽️</text></svg>">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #10b981 0%, #f97316 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 24px;">🍽️</div>
+                <div>
+                    <h1>College Canteen</h1>
+                    <p style="font-size: 12px; color: #666; margin: 0;">Fresh & Fast</p>
+                </div>
+            </a>
+
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="menu.html" class="active">Menu</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <button class="cart-btn" onclick="window.location.href='cart.html'">
+                    Cart
+                    <span class="cart-count">0</span>
+                </button>
+                <button class="mobile-menu-btn">☰</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Menu Page -->
+    <section class="menu-page">
+        <div class="container">
+            <div class="menu-header">
+                <h1>Our Delicious Menu</h1>
+                <p>Explore our wide variety of fresh, hygienic, and affordable meals</p>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search for dishes...">
+                <button type="button" onclick="clearSearch()">✕</button>
+            </div>
+
+            <!-- Category Filters -->
+            <div class="filters">
+                <button class="filter-btn active" onclick="filterByCategory('All')">All</button>
+                <button class="filter-btn" onclick="filterByCategory('Main Course')">Main Course</button>
+                <button class="filter-btn" onclick="filterByCategory('South Indian')">South Indian</button>
+                <button class="filter-btn" onclick="filterByCategory('Breakfast')">Breakfast</button>
+                <button class="filter-btn" onclick="filterByCategory('Snacks')">Snacks</button>
+                <button class="filter-btn" onclick="filterByCategory('Beverages')">Beverages</button>
+                <button class="filter-btn" onclick="filterByCategory('Desserts')">Desserts</button>
+            </div>
+
+            <!-- Menu Items Grid -->
+            <div class="items-grid" id="menuItems"></div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div>
+                <h3>College Canteen</h3>
+                <p>Your favorite campus dining destination, serving fresh, delicious, and affordable meals to students and staff.</p>
+            </div>
+
+            <div>
+                <h3>Quick Links</h3>
+                <a href="index.html">Home</a>
+                <a href="menu.html">Menu</a>
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+            </div>
+
+            <div>
+                <h3>Contact Info</h3>
+                <p>📍 Ground Floor, Main Building<br>College Campus</p>
+                <p>⏰ Mon-Sat: 8:00 AM - 6:00 PM</p>
+                <p>📞 +91 98765 43210</p>
+                <p>✉️ canteen@college.edu</p>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2025 College Canteen. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        let currentCategory = 'All';
+        let searchQuery = '';
+
+        // Load menu items on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadMenuItems();
+
+            // Add search functionality
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('input', debounce(function() {
+                searchQuery = this.value.toLowerCase();
+                loadMenuItems();
+            }, 300));
+        });
+
+        function loadMenuItems() {
+            const menuItemsContainer = document.getElementById('menuItems');
+            menuItemsContainer.innerHTML = '';
+
+            const filteredItems = menuItems.filter(item => {
+                const matchesCategory = currentCategory === 'All' || item.category === currentCategory;
+                const matchesSearch = !searchQuery ||
+                    item.name.toLowerCase().includes(searchQuery) ||
+                    item.description.toLowerCase().includes(searchQuery);
+                return matchesCategory && matchesSearch;
+            });
+
+            if (filteredItems.length === 0) {
+                menuItemsContainer.innerHTML = `
+                    <div style="text-align: center; padding: 50px; grid-column: 1 / -1;">
+                        <h3>No items found</h3>
+                        <p>Try adjusting your search or filter</p>
+                        <button class="btn" onclick="clearFilters()">Clear Filters</button>
+                    </div>
+                `;
+                return;
+            }
+
+            filteredItems.forEach((item, index) => {
+                const itemCard = document.createElement('div');
+                itemCard.className = 'item-card fade-in';
+                itemCard.style.animationDelay = `${index * 0.1}s`;
+
+                itemCard.innerHTML = `
+                    <img src="${item.image}" alt="${item.name}">
+                    <div class="content">
+                        <h3>${item.name}</h3>
+                        <p>${item.description}</p>
+                        <div class="price">₹${item.price}</div>
+                        <button class="add-to-cart" onclick="addToCart(${item.id})">Add to Cart</button>
+                    </div>
+                `;
+
+                menuItemsContainer.appendChild(itemCard);
+            });
+        }
+
+        function filterByCategory(category) {
+            currentCategory = category;
+
+            // Update active filter button
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            loadMenuItems();
+        }
+
+        function addToCart(itemId) {
+            const item = menuItems.find(item => item.id === itemId);
+            if (item && window.cartManager) {
+                window.cartManager.addItem(item);
+            }
+        }
+
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            searchQuery = '';
+            loadMenuItems();
+        }
+
+        function clearFilters() {
+            currentCategory = 'All';
+            searchQuery = '';
+            document.getElementById('searchInput').value = '';
+
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector('.filter-btn').classList.add('active');
+
+            loadMenuItems();
+        }
+    </script>
+</body>
+</html>

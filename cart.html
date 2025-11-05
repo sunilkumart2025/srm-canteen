@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - College Canteen</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍽️</text></svg>">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #10b981 0%, #f97316 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 24px;">🍽️</div>
+                <div>
+                    <h1>College Canteen</h1>
+                    <p style="font-size: 12px; color: #666; margin: 0;">Fresh & Fast</p>
+                </div>
+            </a>
+
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="menu.html">Menu</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <button class="cart-btn" onclick="window.location.href='cart.html'">
+                    Cart
+                    <span class="cart-count">0</span>
+                </button>
+                <button class="mobile-menu-btn">☰</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Cart Page -->
+    <section class="cart-page">
+        <div class="container">
+            <h1 style="text-align: center; margin-bottom: 40px; color: #333;">Shopping Cart</h1>
+
+            <div id="emptyCart" style="display: none; text-align: center; padding: 100px 20px;">
+                <div style="font-size: 4rem; margin-bottom: 20px;">🛒</div>
+                <h2>Your cart is empty</h2>
+                <p style="color: #666; margin-bottom: 30px;">Looks like you haven't added any items yet. Browse our delicious menu!</p>
+                <a href="menu.html" class="btn">Browse Menu</a>
+            </div>
+
+            <div id="cartContent" class="cart-container">
+                <!-- Cart Items -->
+                <div class="cart-items" id="cartItems">
+                    <!-- Cart items will be loaded here -->
+                </div>
+
+                <!-- Cart Summary -->
+                <div class="cart-summary">
+                    <h3>Order Summary</h3>
+
+                    <div id="cartSummary">
+                        <!-- Summary will be loaded here -->
+                    </div>
+
+                    <button class="checkout-btn" onclick="window.location.href='payment.html'">Proceed to Payment</button>
+                    <a href="menu.html" class="btn" style="width: 100%; margin-top: 10px; background: transparent; color: #10b981; border: 2px solid #10b981;">Continue Shopping</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div>
+                <h3>College Canteen</h3>
+                <p>Your favorite campus dining destination, serving fresh, delicious, and affordable meals to students and staff.</p>
+            </div>
+
+            <div>
+                <h3>Quick Links</h3>
+                <a href="index.html">Home</a>
+                <a href="menu.html">Menu</a>
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+            </div>
+
+            <div>
+                <h3>Contact Info</h3>
+                <p>📍 Ground Floor, Main Building<br>College Campus</p>
+                <p>⏰ Mon-Sat: 8:00 AM - 6:00 PM</p>
+                <p>📞 +91 98765 43210</p>
+                <p>✉️ canteen@college.edu</p>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2025 College Canteen. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        function loadCart() {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const cartItemsContainer = document.getElementById('cartItems');
+            const cartSummaryContainer = document.getElementById('cartSummary');
+            const emptyCart = document.getElementById('emptyCart');
+            const cartContent = document.getElementById('cartContent');
+
+            if (cart.length === 0) {
+                emptyCart.style.display = 'block';
+                cartContent.style.display = 'none';
+                return;
+            }
+
+            emptyCart.style.display = 'none';
+            cartContent.style.display = 'grid';
+
+            // Load cart items
+            cartItemsContainer.innerHTML = '';
+            cart.forEach(item => {
+                const itemElement = document.createElement('div');
+                itemElement.className = 'cart-item';
+
+                itemElement.innerHTML = `
+                    <img src="${item.image}" alt="${item.name}">
+                    <div class="details">
+                        <h3>${item.name}</h3>
+                        <p>${item.description}</p>
+                        <div class="quantity-controls">
+                            <button class="quantity-btn" onclick="updateQuantity(${item.id}, ${item.quantity - 1})">-</button>
+                            <span>${item.quantity}</span>
+                            <button class="quantity-btn" onclick="updateQuantity(${item.id}, ${item.quantity + 1})">+</button>
+                        </div>
+                        <div style="margin-top: 10px; font-size: 1.2rem; font-weight: bold; color: #10b981;">
+                            ₹${(item.price * item.quantity).toFixed(2)}
+                        </div>
+                    </div>
+                    <button class="remove-btn" onclick="removeItem(${item.id})">Remove</button>
+                `;
+
+                cartItemsContainer.appendChild(itemElement);
+            });
+
+            // Load cart summary
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const tax = subtotal * 0.05;
+            const total = subtotal + tax;
+
+            cartSummaryContainer.innerHTML = `
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span>₹${subtotal.toFixed(2)}</span>
+                </div>
+                <div class="summary-row">
+                    <span>Tax (5%)</span>
+                    <span>₹${tax.toFixed(2)}</span>
+                </div>
+                <div style="border-top: 1px solid #e5e7eb; margin: 15px 0;"></div>
+                <div class="total">
+                    <span>Total</span>
+                    <span>₹${total.toFixed(2)}</span>
+                </div>
+            `;
+        }
+
+        function updateQuantity(itemId, newQuantity) {
+            if (window.cartManager) {
+                window.cartManager.updateQuantity(itemId, newQuantity);
+                loadCart();
+            }
+        }
+
+        function removeItem(itemId) {
+            if (window.cartManager) {
+                window.cartManager.removeItem(itemId);
+                loadCart();
+            }
+        }
+
+        function proceedToPayment() {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            if (cart.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+
+            // For demo purposes, redirect to order confirmation
+            // In a real app, this would go to a payment page
+            window.location.href = 'order-confirmation.html';
+        }
+
+        // Load cart on page load
+        document.addEventListener('DOMContentLoaded', loadCart);
+
+        // Listen for cart updates
+        window.addEventListener('storage', loadCart);
+    </script>
+</body>
+</html>

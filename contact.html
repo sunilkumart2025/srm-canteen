@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - College Canteen</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍽️</text></svg>">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #10b981 0%, #f97316 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 24px;">🍽️</div>
+                <div>
+                    <h1>College Canteen</h1>
+                    <p style="font-size: 12px; color: #666; margin: 0;">Fresh & Fast</p>
+                </div>
+            </a>
+
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="menu.html">Menu</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html" class="active">Contact</a></li>
+            </ul>
+
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <button class="cart-btn" onclick="window.location.href='cart.html'">
+                    Cart
+                    <span class="cart-count">0</span>
+                </button>
+                <button class="mobile-menu-btn">☰</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contact Section -->
+    <section style="padding: 120px 0 80px;">
+        <div class="container">
+            <div style="text-align: center; margin-bottom: 60px;">
+                <h1 style="font-size: 3rem; margin-bottom: 20px; color: #333;">Contact Us</h1>
+                <p style="font-size: 1.2rem; color: #666; max-width: 600px; margin: 0 auto;">
+                    Have questions or feedback? We'd love to hear from you. Get in touch with us!
+                </p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 60px;">
+                <!-- Contact Information -->
+                <div>
+                    <h2 style="margin-bottom: 30px; color: #333;">Get In Touch</h2>
+
+                    <div style="margin-bottom: 30px;">
+                        <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                            <div style="width: 50px; height: 50px; background: #10b981; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 20px; color: white; font-size: 1.5rem;">📍</div>
+                            <div>
+                                <h4 style="margin: 0; color: #333;">Location</h4>
+                                <p style="margin: 5px 0 0 0; color: #666;">Ground Floor, Main Building<br>College Campus</p>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                            <div style="width: 50px; height: 50px; background: #10b981; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 20px; color: white; font-size: 1.5rem;">⏰</div>
+                            <div>
+                                <h4 style="margin: 0; color: #333;">Hours</h4>
+                                <p style="margin: 5px 0 0 0; color: #666;">Mon-Sat: 8:00 AM - 6:00 PM<br>Sunday: Closed</p>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                            <div style="width: 50px; height: 50px; background: #10b981; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 20px; color: white; font-size: 1.5rem;">📞</div>
+                            <div>
+                                <h4 style="margin: 0; color: #333;">Phone</h4>
+                                <p style="margin: 5px 0 0 0; color: #666;">+91 98765 43210</p>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; align-items: center;">
+                            <div style="width: 50px; height: 50px; background: #10b981; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 20px; color: white; font-size: 1.5rem;">✉️</div>
+                            <div>
+                                <h4 style="margin: 0; color: #333;">Email</h4>
+                                <p style="margin: 5px 0 0 0; color: #666;">canteen@college.edu</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="background: #f8f9fa; padding: 30px; border-radius: 15px;">
+                        <h4 style="margin-bottom: 15px; color: #333;">Quick Stats</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                            <div style="text-align: center;">
+                                <div style="font-size: 2rem; font-weight: bold; color: #10b981;">500+</div>
+                                <div style="color: #666; font-size: 0.9rem;">Daily Customers</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 2rem; font-weight: bold; color: #10b981;">15+</div>
+                                <div style="color: #666; font-size: 0.9rem;">Years Experience</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <div>
+                    <h2 style="margin-bottom: 30px; color: #333;">Send us a Message</h2>
+
+                    <form id="contactForm" onsubmit="handleContactSubmit(event)">
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" name="name" placeholder="Your full name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" placeholder="your.email@college.edu" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" name="subject" placeholder="What's this about?" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" placeholder="Your message..." rows="5" required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn" style="width: 100%;">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div>
+                <h3>College Canteen</h3>
+                <p>Your favorite campus dining destination, serving fresh, delicious, and affordable meals to students and staff.</p>
+            </div>
+
+            <div>
+                <h3>Quick Links</h3>
+                <a href="index.html">Home</a>
+                <a href="menu.html">Menu</a>
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+            </div>
+
+            <div>
+                <h3>Contact Info</h3>
+                <p>📍 Ground Floor, Main Building<br>College Campus</p>
+                <p>⏰ Mon-Sat: 8:00 AM - 6:00 PM</p>
+                <p>📞 +91 98765 43210</p>
+                <p>✉️ canteen@college.edu</p>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2025 College Canteen. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Additional Styles -->
+    <style>
+        .error {
+            border-color: #ef4444 !important;
+        }
+
+        .error-message {
+            color: #ef4444;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .btn {
+            cursor: pointer;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+    </style>
+
+    <script src="script.js"></script>
+    <script>
+        function handleContactSubmit(event) {
+            event.preventDefault();
+
+            const form = event.target;
+            const name = form.name.value;
+            const email = form.email.value;
+            const subject = form.subject.value;
+            const message = form.message.value;
+
+            // Clear previous errors
+            FormValidator.clearAllErrors(form);
+
+            // Validate name
+            if (!FormValidator.validateRequired(name)) {
+                FormValidator.showError(form.name, 'Please enter your name');
+                return;
+            }
+
+            // Validate email
+            if (!FormValidator.validateEmail(email)) {
+                FormValidator.showError(form.email, 'Please enter a valid email address');
+                return;
+            }
+
+            // Validate subject
+            if (!FormValidator.validateRequired(subject)) {
+                FormValidator.showError(form.subject, 'Please enter a subject');
+                return;
+            }
+
+            // Validate message
+            if (!FormValidator.validateMinLength(message, 10)) {
+                FormValidator.showError(form.message, 'Please enter a message (minimum 10 characters)');
+                return;
+            }
+
+            // Simulate form submission
+            const submitBtn = form.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
+
+            setTimeout(() => {
+                alert('Thank you for your message! We\'ll get back to you soon.');
+                form.reset();
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Send Message';
+            }, 1500);
+        }
+    </script>
+</body>
+</html>

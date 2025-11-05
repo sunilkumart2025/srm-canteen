@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation - College Canteen</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍽️</text></svg>">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #10b981 0%, #f97316 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 24px;">🍽️</div>
+                <div>
+                    <h1>College Canteen</h1>
+                    <p style="font-size: 12px; color: #666; margin: 0;">Fresh & Fast</p>
+                </div>
+            </a>
+
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="menu.html">Menu</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <button class="cart-btn" onclick="window.location.href='cart.html'">
+                    Cart
+                    <span class="cart-count">0</span>
+                </button>
+                <button class="mobile-menu-btn">☰</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Order Confirmation -->
+    <section style="padding: 120px 0 80px;">
+        <div class="container">
+            <div style="text-align: center; max-width: 600px; margin: 0 auto;">
+                <div style="font-size: 5rem; margin-bottom: 20px;">🎉</div>
+                <h1 style="color: #10b981; margin-bottom: 20px;">Order Confirmed!</h1>
+                <p style="font-size: 1rem; color: #666; margin-bottom: 10px;">
+                    Order ID: <strong id="orderId">#ORD-000000</strong>
+                </p>
+                <p style="font-size: 1.2rem; color: #666; margin-bottom: 30px;">
+                    Thank you for your order! Your delicious food will be ready soon.
+                </p>
+
+                <div style="background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin-bottom: 30px;">
+                    <h3 style="margin-bottom: 20px; color: #333;">Order Details</h3>
+
+                    <div id="orderDetails">
+                        <!-- Order details will be loaded here -->
+                    </div>
+
+                    <div style="border-top: 1px solid #e5e7eb; margin: 20px 0; padding-top: 20px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <span>Subtotal:</span>
+                            <span id="subtotal">₹0.00</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <span>Tax (5%):</span>
+                            <span id="tax">₹0.00</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: bold; color: #10b981;">
+                            <span>Total:</span>
+                            <span id="total">₹0.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 30px;">
+                    <h4 style="margin-bottom: 10px; color: #333;">Estimated Delivery Time</h4>
+                    <p style="color: #666; margin: 0;">Your order will be ready in approximately 15-20 minutes</p>
+                </div>
+
+                <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                    <button onclick="downloadBill()" class="btn">Download Bill</button>
+                    <a href="index.html" class="btn btn-secondary">Back to Home</a>
+                    <a href="menu.html" class="btn btn-secondary">Order Again</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div>
+                <h3>College Canteen</h3>
+                <p>Your favorite campus dining destination, serving fresh, delicious, and affordable meals to students and staff.</p>
+            </div>
+
+            <div>
+                <h3>Quick Links</h3>
+                <a href="index.html">Home</a>
+                <a href="menu.html">Menu</a>
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+            </div>
+
+            <div>
+                <h3>Contact Info</h3>
+                <p>📍 Ground Floor, Main Building<br>College Campus</p>
+                <p>⏰ Mon-Sat: 8:00 AM - 6:00 PM</p>
+                <p>📞 +91 98765 43210</p>
+                <p>✉️ canteen@college.edu</p>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2025 College Canteen. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="script.js"></script>
+    <script>
+        function downloadBill() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Get order details
+            const orderId = document.getElementById('orderId').textContent;
+            const orderDate = new Date().toLocaleDateString();
+            const orderTime = new Date().toLocaleTimeString();
+
+            // Add header
+            doc.setFontSize(20);
+            doc.text('College Canteen', 105, 20, { align: 'center' });
+            doc.setFontSize(12);
+            doc.text('Ground Floor, Main Building', 105, 30, { align: 'center' });
+            doc.text('College Campus', 105, 35, { align: 'center' });
+            doc.text('Phone: +91 98765 43210', 105, 40, { align: 'center' });
+
+            // Add order info
+            doc.setFontSize(14);
+            doc.text('BILL RECEIPT', 105, 55, { align: 'center' });
+            doc.setFontSize(10);
+            doc.text(`Order ID: ${orderId}`, 20, 70);
+            doc.text(`Date: ${orderDate}`, 20, 75);
+            doc.text(`Time: ${orderTime}`, 20, 80);
+
+            // Add table header
+            doc.setFontSize(10);
+            doc.text('Item', 20, 95);
+            doc.text('Qty', 120, 95);
+            doc.text('Price', 150, 95);
+            doc.text('Total', 170, 95);
+
+            // Add line
+            doc.line(20, 97, 190, 97);
+
+            // Get cart items
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            let yPosition = 105;
+
+            cart.forEach(item => {
+                doc.text(item.name, 20, yPosition);
+                doc.text(item.quantity.toString(), 120, yPosition);
+                doc.text(`₹${item.price.toFixed(2)}`, 150, yPosition);
+                doc.text(`₹${(item.price * item.quantity).toFixed(2)}`, 170, yPosition);
+                yPosition += 10;
+            });
+
+            // Add totals
+            yPosition += 10;
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const tax = subtotal * 0.05;
+            const total = subtotal + tax;
+
+            doc.line(20, yPosition - 5, 190, yPosition - 5);
+            doc.text('Subtotal:', 120, yPosition);
+            doc.text(`₹${subtotal.toFixed(2)}`, 170, yPosition);
+            yPosition += 10;
+            doc.text('Tax (5%):', 120, yPosition);
+            doc.text(`₹${tax.toFixed(2)}`, 170, yPosition);
+            yPosition += 10;
+            doc.setFont('helvetica', 'bold');
+            doc.text('Total:', 120, yPosition);
+            doc.text(`₹${total.toFixed(2)}`, 170, yPosition);
+
+            // Add footer
+            yPosition += 20;
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(8);
+            doc.text('Thank you for your order!', 105, yPosition, { align: 'center' });
+            doc.text('Your food will be ready in approximately 15-20 minutes.', 105, yPosition + 5, { align: 'center' });
+
+            // Save the PDF
+            doc.save(`bill-${orderId.replace('#', '')}.pdf`);
+        }
+
+        function loadOrderConfirmation() {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const orderDetails = document.getElementById('orderDetails');
+
+            if (cart.length === 0) {
+                // If no cart items, redirect to menu
+                window.location.href = 'menu.html';
+                return;
+            }
+
+            // Generate order number (4-digit random number)
+            const orderNumber = 'ORD-' + Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+            document.querySelector('h1').textContent = `Order #${orderNumber} Confirmed!`;
+            document.getElementById('orderId').textContent = `#${orderNumber}`;
+
+            // Load order items
+            orderDetails.innerHTML = '';
+            cart.forEach(item => {
+                const itemElement = document.createElement('div');
+                itemElement.style.cssText = 'display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #e5e7eb;';
+
+                itemElement.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <img src="${item.image}" alt="${item.name}" style="width: 50px; height: 50px; border-radius: 8px; object-fit: cover;">
+                        <div>
+                            <h4 style="margin: 0; color: #333;">${item.name}</h4>
+                            <p style="margin: 5px 0 0 0; color: #666; font-size: 0.9rem;">Qty: ${item.quantity}</p>
+                        </div>
+                    </div>
+                    <span style="font-weight: bold; color: #10b981;">₹${(item.price * item.quantity).toFixed(2)}</span>
+                `;
+
+                orderDetails.appendChild(itemElement);
+            });
+
+            // Calculate totals
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const tax = subtotal * 0.05;
+            const total = subtotal + tax;
+
+            document.getElementById('subtotal').textContent = `₹${subtotal.toFixed(2)}`;
+            document.getElementById('tax').textContent = `₹${tax.toFixed(2)}`;
+            document.getElementById('total').textContent = `₹${total.toFixed(2)}`;
+
+            // Clear cart after order confirmation
+            localStorage.removeItem('cart');
+            if (window.cartManager) {
+                window.cartManager.clearCart();
+            }
+        }
+
+        // Load order confirmation on page load
+        document.addEventListener('DOMContentLoaded', loadOrderConfirmation);
+    </script>
+</body>
+</html>
